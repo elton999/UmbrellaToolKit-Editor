@@ -7,6 +7,23 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <!--<DockPanel >
+            <ToolBarTray DockPanel.Dock="Top" Background="White">
+                <ToolBar Background="White">
+                    <Button>
+                        <TextBlock>New</TextBlock>
+                    </Button>
+                    <Button>
+                        <TextBlock>Open</TextBlock>
+                    </Button>
+                    <Button>
+                        <TextBlock>Save</TextBlock>
+                    </Button>
+                </ToolBar>
+            </ToolBarTray>
+            <Grid>
+                
+            </Grid>
+        </DockPanel>-->
     </Grid>
 </Window>
