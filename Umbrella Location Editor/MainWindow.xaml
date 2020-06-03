@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Umbrella_Location_Editor"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Name="RootGrid">
         <!--<DockPanel >
             <ToolBarTray DockPanel.Dock="Top" Background="White">
                 <ToolBar Background="White">
