@@ -5,20 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Umbrella_Location_Editor"
         mc:Ignorable="d"
-        Title="AddTag" Height="102.357" Width="304.816">
-    <Grid>
+        Title="Add Tag" Height="123.024" Width="304.816" ResizeMode="NoResize">
+    <Grid Background="White">
+
         <Grid>
-            <Grid>
-                <Label Content="Tag Name" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Column="0" Grid.Row="0">
+                <Label Content="Tag Name" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             </Grid>
-            <Grid>
-                <TextBox HorizontalAlignment="Center" Name="TagString" Height="23" VerticalAlignment="Top" Margin="126,10,10,0" Width="161"/>
+            <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0">
+                <TextBox HorizontalAlignment="Center" Name="TagString" Height="23" VerticalAlignment="Center"  Width="178"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Button Content="Add" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="Save" Background="White"  Width="79"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="2">
+                <Button Content="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Cancel" Background="White" Width="79"/>
             </Grid>
         </Grid>
-        <Grid>
-            <Button Content="Add" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="75" Margin="132,0,0,10" Click="Save"/>
-            <Button Content="Cancel" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="75" Margin="212,0,0,10" Click="Cancel"/>
-        </Grid>
+
     </Grid>
 
 </Window>

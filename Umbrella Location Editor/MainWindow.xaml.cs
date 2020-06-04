@@ -33,17 +33,17 @@ namespace Umbrella_Location_Editor
             this.Translations.Add(new List<string>());
 
             this.ResertList();
+            this.CreateAddLineBtn();
+            this.Content = this.RootGrid;
         }
 
         private void ResertList()
         {
             this.Grid = new Grid();
             //this.RootGrid.Children.Clear();
-            this.RootGrid.Children.Add(Grid);
+            this.LayoutTable.Children.Add(Grid);
             this.CreateMenu();
             this.CreateTable(this.Languages.Count() + 1, this.Tags.Count() + 1);
-
-            this.Content = this.RootGrid;
         }
 
         Grid Grid;
@@ -104,16 +104,58 @@ namespace Umbrella_Location_Editor
         public  List<string> Languages = new List<string>();
         public  List<string> Tags = new List<string>();
         public  List<List<string>> Translations;
+
+        private List<List<TextBox>> TextBoxList = new List<List<TextBox>>();
+
+        private void UpdateListTextBox()
+        {
+            if (this.TextBoxList.Count() < this.Tags.Count())
+            {
+                this.TextBoxList.Add(new List<TextBox>());
+                int LastTextBox = this.Tags.Count() -1;
+
+                for (int y = this.TextBoxList[LastTextBox].Count(); y < this.Languages.Count(); y++)
+                {
+                    TextBox textBox = new TextBox();
+                    textBox.Name = this.Tags[LastTextBox] + "_" + this.Languages[y];
+                    textBox.Text = this.Tags[LastTextBox];
+                    this.TextBoxList[LastTextBox].Add(textBox);
+                }
+            }
+            
+            if(this.TextBoxList.Count() > 0 && this.TextBoxList[0].Count() < this.Languages.Count())
+            {
+                for (int x = 0; x < this.Tags.Count(); x++)
+                {
+                    for (int y = this.TextBoxList[0].Count(); y < this.Languages.Count(); y++)
+                    {
+                        TextBox textBox = new TextBox();
+                        textBox.Name = this.Tags[x] + "_" + this.Languages[y];
+                        textBox.Text = this.Tags[this.Tags.Count() - 1];
+                        this.TextBoxList[x].Add(textBox);
+                    }
+                }
+            }
+        }
+
+
+        private void AddRowTable()
+        {
+            RowDefinition r = new RowDefinition();
+            r.Height = GridLength.Auto;
+            Grid.RowDefinitions.Add(r);
+        }
+
         public void CreateTable(int columns, int rows)
         {
+            this.UpdateListTextBox();
+
             for (int x = 0; x < columns; x++)
                 Grid.ColumnDefinitions.Add(new ColumnDefinition());
 
             for (int y = 1; y < rows + 2; y++)
             {
-                RowDefinition r = new RowDefinition();
-                r.Height = GridLength.Auto;
-                Grid.RowDefinitions.Add(r);
+                this.AddRowTable();
             }
 
             for (int x = 0; x < columns; x++)
@@ -145,26 +187,20 @@ namespace Umbrella_Location_Editor
                         }
                         else if(y > 1)
                         {
-                            TextBox tb = new TextBox();
-                            tb.Name = this.Tags[y - 2] + "_" + this.Languages[x - 1];
-                            tb.Text = this.Translations[x - 1][y - 2];
-                            Grid.SetColumn(tb, x);
-                            Grid.SetRow(tb, y);
-                            Grid.Children.Add(tb);
+                            TextBox textBox = this.TextBoxList[y - 2][x - 1];
+                            Grid.SetColumn(textBox, x);
+                            Grid.SetRow(textBox, y);
+                            Grid.Children.Add(textBox);
                         }
                     }
                 }
             }
-
-            this.CreateAddLineBtn(rows);
         }
 
         private Button AddLineBtn;
-        private void CreateAddLineBtn(int rows)
+        private void CreateAddLineBtn()
         {
-            RowDefinition r = new RowDefinition();
-            r.Height = GridLength.Auto;
-            Grid.RowDefinitions.Add(r);
+            this.AddRowTable();
 
             AddLineBtn = new Button();
             AddLineBtn.Name = "AddLineBtn";
@@ -172,26 +208,10 @@ namespace Umbrella_Location_Editor
             AddLineBtn.FontSize = 25;
             AddLineBtn.Background = Brushes.White;
             AddLineBtn.Click += OpenAddTag;
-            Grid.SetRow(AddLineBtn, rows+2);
-            Grid.SetColumnSpan(AddLineBtn, 50);
-            Grid.Children.Add(AddLineBtn);
+            this.LayoutAddBtn.Children.Add(AddLineBtn);
         }
 
-
-        private void UpdateTranlations()
-        {
-            for (int x = 0; x < this.Languages.Count(); x++)
-            {
-                for(int y = 0; y < this.Tags.Count(); y++)
-                {
-                    Console.Write(x);
-                    Console.Write(y);
-                    Console.WriteLine(this.Tags[y] + "_" + this.Languages[x]);
-                    Console.WriteLine((TextBox)this.RootGrid.FindName(this.Tags[y] + "_" + this.Languages[x]) != null);
-                }
-            }
-        }
-
+        
         private AddTag AddTagWindow;
         private void OpenAddTag(object sender, EventArgs e)
         {
@@ -203,10 +223,30 @@ namespace Umbrella_Location_Editor
 
         public void AddTagOnList(string tag)
         {
-            this.UpdateTranlations();
             this.Tags.Add(tag);
             for (int i = 0; i < this.Languages.Count(); i++) this.Translations[i].Add(tag);
-            this.ResertList();
+            this.UpdateListTextBox();
+            
+            this.AddRowTable();
+
+            TextBlock text = new TextBlock();
+            text.Text = tag;
+            Grid.SetColumn(text, 0);
+            Grid.SetRow(text, this.Tags.Count() + 2);
+            Grid.Children.Add(text);
+
+            for (int x = this.Tags.Count() - 1; x < this.Tags.Count(); x ++)
+            {
+                Console.WriteLine(this.TextBoxList.Count());
+                Console.WriteLine(this.TextBoxList[this.Tags.Count() - 1].Count());
+                for (int y = 0; y < this.Languages.Count(); y++)
+                {
+                    TextBox textBox = this.TextBoxList[x][y];
+                    Grid.SetColumn(textBox, y + 1);
+                    Grid.SetRow(textBox, this.Tags.Count()+2);
+                    Grid.Children.Add(textBox);
+                }
+            }
         }
 
         private void AddNewLanguageOnList(string language)

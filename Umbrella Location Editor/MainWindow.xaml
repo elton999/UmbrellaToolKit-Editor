@@ -7,23 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid Name="RootGrid">
-        <!--<DockPanel >
-            <ToolBarTray DockPanel.Dock="Top" Background="White">
-                <ToolBar Background="White">
-                    <Button>
-                        <TextBlock>New</TextBlock>
-                    </Button>
-                    <Button>
-                        <TextBlock>Open</TextBlock>
-                    </Button>
-                    <Button>
-                        <TextBlock>Save</TextBlock>
-                    </Button>
-                </ToolBar>
-            </ToolBarTray>
-            <Grid>
-                
-            </Grid>
-        </DockPanel>-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="100"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Name="LayoutTable" Grid.Row="0" Grid.Column="0"/>
+        <Grid  Name="LayoutAddBtn" Grid.Row="1" Grid.Column="0">
+            
+        </Grid>
     </Grid>
+    
 </Window>
