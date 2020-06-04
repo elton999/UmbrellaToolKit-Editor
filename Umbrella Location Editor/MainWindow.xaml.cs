@@ -21,6 +21,8 @@ namespace Umbrella_Location_Editor
     /// </summary>
     public partial class MainWindow : Window
     {
+        public FIleXML FIleXML;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,9 +30,8 @@ namespace Umbrella_Location_Editor
 
             this.Languages.Add("English");
             this.Languages.Add("Portugues");
-            this.Translations = new List<List<string>>();
-            this.Translations.Add(new List<string>());
-            this.Translations.Add(new List<string>());
+
+            this.FIleXML = new FIleXML();
 
             this.ResertList();
             this.CreateAddLineBtn();
@@ -46,7 +47,11 @@ namespace Umbrella_Location_Editor
             this.CreateTable(this.Languages.Count() + 1, this.Tags.Count() + 1);
         }
 
-        Grid Grid;
+        #region ToolBar btns
+        private Grid Grid;
+        private Button NewBtn;
+        private Button OpenBtn;
+        private Button SaveBtn;
         public void CreateMenu()
         {
             
@@ -61,22 +66,24 @@ namespace Umbrella_Location_Editor
             ToolBar.Background = Brushes.White;
             
             // Buttons
-            Button NewBtn = new Button();
+            NewBtn = new Button();
             NewBtn.Name = "New";
             NewBtn.Background = Brushes.White;
             NewBtn.Content = "New";
+            NewBtn.Click += NewBtn_Click;
             ToolBar.Items.Add(NewBtn);
 
-            Button OpenBtn = new Button();
+            OpenBtn = new Button();
             OpenBtn.Name = "Open";
             OpenBtn.Background = Brushes.White;
             OpenBtn.Content = "Open";
             ToolBar.Items.Add(OpenBtn);
 
-            Button SaveBtn = new Button();
+            SaveBtn = new Button();
             SaveBtn.Name = "Save";
             SaveBtn.Background = Brushes.White;
             SaveBtn.Content = "Save";
+            SaveBtn.Click += SaveBtn_Click;
             ToolBar.Items.Add(SaveBtn);
             
             //Editor Location
@@ -97,13 +104,46 @@ namespace Umbrella_Location_Editor
             this.Grid.Children.Add(DockPanel);
         }
 
+        public void NewBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.FIleXML.CreateNewFile();
+            this.SaveFile();
+        }
+
+        public void SaveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.SaveFile();
+        }
+
+
+        private void SaveFile()
+        {
+            this.FIleXML.AddItemString("Languages", this.Languages);
+            this.FIleXML.AddItemString("Tags", this.Tags);
+
+            List<string> Translations = new List<string>();
+
+            for (int x = 0; x < this.Languages.Count(); x++)
+            {
+                for (int y = 0; y < this.Tags.Count(); y++)
+                {
+                    Translations.Add(this.TextBoxList[y][x].Text);
+                }
+                this.FIleXML.AddItemString(this.Languages[x], Translations);
+                Translations.Clear();
+            }
+
+            this.FIleXML.SaveFile();
+        }
+
+        #endregion
+
         /// <summary>
         /// Create a new Table Content
         /// </summary>
 
-        public  List<string> Languages = new List<string>();
-        public  List<string> Tags = new List<string>();
-        public  List<List<string>> Translations;
+        public List<string> Languages = new List<string>();
+        public List<string> Tags = new List<string>();
 
         private List<List<TextBox>> TextBoxList = new List<List<TextBox>>();
 
@@ -224,7 +264,7 @@ namespace Umbrella_Location_Editor
         public void AddTagOnList(string tag)
         {
             this.Tags.Add(tag);
-            for (int i = 0; i < this.Languages.Count(); i++) this.Translations[i].Add(tag);
+            //for (int i = 0; i < this.Languages.Count(); i++) this.Translations[i].Add(tag);
             this.UpdateListTextBox();
             
             this.AddRowTable();
@@ -251,11 +291,11 @@ namespace Umbrella_Location_Editor
 
         private void AddNewLanguageOnList(string language)
         {
-            this.Languages.Add(language);
+           /* this.Languages.Add(language);
             this.Translations.Add(new List<string>());
             for (int i = 0; i < this.Tags.Count(); i++) {
                 this.Translations[this.Translations.Count() - 1].Add(this.Tags[i]);
-            }
+            }*/
         }
     }
 }
